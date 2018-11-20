@@ -55,7 +55,7 @@ function applyDiff(e, r) {
     return t
 }
 private_.accounts = [], private_.accountsIndexById = {}, private_.executor = null, private_.addAccount = function(e, r) {
-    e.address || (e.address = self.generateAddressByPublicKey(e.publicKey)), e.balance = e.balance || {}, e.u_balance = e.u_balance || {}, e.balance.BEL = e.balance.BEL || 0, e.u_balance.BEL = e.u_balance.BEL || 0, (r || private_).accounts.push(e);
+    e.address || (e.address = self.generateAddressByPublicKey(e.publicKey)), e.balance = e.balance || {}, e.u_balance = e.u_balance || {}, e.balance.SRN = e.balance.SRN || 0, e.u_balance.SRN = e.u_balance.SRN || 0, (r || private_).accounts.push(e);
     var t = (r || private_).accounts.length - 1;
     return (r || private_).accountsIndexById[e.address] = t, e
 }, private_.removeAccount = function(e, r) {

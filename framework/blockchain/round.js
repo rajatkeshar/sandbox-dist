@@ -17,7 +17,7 @@ function _interopRequireDefault(e) {
         default: e
     }
 }
-var async = require("async"), crypto = require("crypto"), BelriumJS = require("asch-js"), slots = require("../helpers/slots.js"), OutTransferManager = require("../helpers/outtransfer-manager.js"), private_ = {}, self = null, library = null, modules = null;
+var async = require("async"), crypto = require("crypto"), ChainJS = require("chain-js"), slots = require("../helpers/slots.js"), constants = require("../helpers/constants.js"), OutTransferManager = require("../helpers/outtransfer-manager.js"), private_ = {}, self = null, library = null, modules = null;
 
 function Round(e, t) {
     library = t, e(null, self = this)
@@ -141,7 +141,7 @@ private_.loaded = !1, private_.delegates = [], private_.cacheDelegates = {
                         return modules.logic.transaction.create({
                             type: 1,
                             fee: "0",
-                            args: (0, _stringify2.default)([e.currency, "BEL" === e.currency ? e.amount : e.amount2, e.id, modules.blockchain.accounts.generateAddressByPublicKey(e.senderPublicKey)])
+                            args: (0, _stringify2.default)([e.currency, constants.defaultCurrency === e.currency ? e.amount : e.amount2, e.id, modules.blockchain.accounts.generateAddressByPublicKey(e.senderPublicKey)])
                         }, t)
                     }), e.next = 45, modules.blockchain.transactions.receiveTransactionsAsync(d);
                 case 45:
@@ -216,7 +216,7 @@ private_.loaded = !1, private_.delegates = [], private_.cacheDelegates = {
                                 n = a[0],
                                 s = a[1],
                                 i = modules.blockchain.accounts.generateAddressByPublicKey(e.senderPublicKey),
-                                o = BelriumJS.transfer.createOutTransfer(i, app.meta.transactionId, e.id, n, s, t);
+                                o = ChainJS.transfer.createOutTransfer(i, app.meta.transactionId, e.id, n, s, t);
                             o.signatures = [];
                             var l = !0,
                                 u = !1,
@@ -224,7 +224,7 @@ private_.loaded = !1, private_.delegates = [], private_.cacheDelegates = {
                             try {
                                 for (var p, d = (0, _getIterator3.default)(app.config.secrets); !(l = (p = d.next()).done); l = !0) {
                                     var g = p.value;
-                                    if (g !== t && o.signatures.push(BelriumJS.transfer.signOutTransfer(o, g)), o.signatures.length >= app.meta.unlockDelegates) break
+                                    if (g !== t && o.signatures.push(ChainJS.transfer.signOutTransfer(o, g)), o.signatures.length >= app.meta.unlockDelegates) break
                                 }
                             } catch (e) {
                                 u = !0, c = e
@@ -335,7 +335,7 @@ private_.loaded = !1, private_.delegates = [], private_.cacheDelegates = {
         } else if ("pendingOutTransfer" == e.topic) {
         var r = e.message;
         if (!private_.outTransferManager.has(r)) {
-            var a = BelriumJS.transfer.signOutTransfer(out);
+            var a = ChainJS.transfer.signOutTransfer(out);
             private_.outTransferManager.addPending(r), private_.outTransferManager.addSignature(r.id, a), modules.api.transport.message("otSignature", {
                 id: r.id,
                 signature: a

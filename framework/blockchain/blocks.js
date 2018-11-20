@@ -55,7 +55,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
             r && (app.logger.error(r), process.exit(0)), modules.blockchain.accounts.undoMerging({
                 publicKey: e.delegate,
                 balance: {
-                    BEL: a
+                    SRN: a
                 }
             }, function(r) {
                 private_.deleteBlock(e.id, function(e) {
@@ -124,7 +124,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                         // console.log("22222222222222222222222222222222222222222222");
                         e.next = 25;
                         break
-                    } 
+                    }
                     throw new Error("Invalid previous block");
                 case 25:
                     // console.log("verify: case25");
@@ -293,7 +293,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                         e.next = 31;
                         break
                     }
-                    if (e.prev = 2, modules.logic.block.normalize(t), !r.votes) { 
+                    if (e.prev = 2, modules.logic.block.normalize(t), !r.votes) {
                         // console.log("normlization true case0");
                         e.next = 14;
                         break
@@ -466,7 +466,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
         }), t[e]
     })
 }, Blocks.prototype.deleteBlocksBefore = function(e, t) {
-    async.whilst(function() {     
+    async.whilst(function() {
         return !(e.height >= private_.lastBlock.height)
     }, function(e) {
         app.logger.trace("Blocks#popLastBlock", private_.lastBlock.height), private_.popLastBlock(private_.lastBlock, function(t, r) {
