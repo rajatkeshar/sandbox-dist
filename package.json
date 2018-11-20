@@ -1,25 +1,26 @@
 {
-  "_from": "https://rajatkesharwani@bitbucket.org/rajatkesharwani/bel-sandbox.git",
-  "_id": "bel-sandbox@1.0.0",
+  "_from": "git+https://github.com/salinsunny2/sandbox-dist.git",
+  "_id": "sandbox-dist@1.0.0",
   "_inBundle": false,
-  "_integrity": "sha512-ql4xpiVtdN0XVKLnyMgMCGm+PMdOFQRD2V+xW6RxnJQyUAht7hbbl7HflGmN8iGjplAJbEQGPOMIsYBWmg5XPA==",
-  "_location": "/bel-sandbox",
+  "_integrity": "sha1-oPfVqevLAjk3NK59oPZqiQUkrr4=",
+  "_location": "/sandbox-dist",
   "_phantomChildren": {},
   "_requested": {
-    "type": "remote",
-    "raw": "bel-sandbox@https://rajatkesharwani@bitbucket.org/rajatkesharwani/bel-sandbox.git",
-    "name": "bel-sandbox",
-    "escapedName": "bel-sandbox",
-    "rawSpec": "https://rajatkesharwani@bitbucket.org/rajatkesharwani/bel-sandbox.git",
-    "saveSpec": "https://rajatkesharwani@bitbucket.org/rajatkesharwani/bel-sandbox.git",
-    "fetchSpec": "https://rajatkesharwani@bitbucket.org/rajatkesharwani/bel-sandbox.git"
+    "type": "git",
+    "raw": "sandbox@git+https://github.com/salinsunny2/sandbox-dist.git",
+    "name": "sandbox-dist",
+    "escapedName": "sandbox-dist",
+    "rawSpec": "git+https://github.com/salinsunny2/sandbox-dist.git",
+    "saveSpec": "git+https://github.com/salinsunny2/sandbox-dist.git",
+    "fetchSpec": "https://github.com/salinsunny2/sandbox-dist.git",
+    "gitCommittish": "master"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://rajatkesharwani@bitbucket.org/rajatkesharwani/bel-sandbox.git",
-  "_spec": "bel-sandbox@https://rajatkesharwani@bitbucket.org/rajatkesharwani/bel-sandbox.git",
-  "_where": "/home/rajat/oodles/POC-sandbox",
+  "_resolved": "git+https://github.com/salinsunny2/sandbox-dist.git#97178ddaebc18ea4c7ed55428ee35a739ac4ac10",
+  "_spec": "sandbox-dist@git+https://github.com/salinsunny2/sandbox-dist.git",
+  "_where": "/home/rajat/BlockchainCodebase",
   "author": {
     "name": "Rajat Kesharwani",
     "email": "rajat.sunny2@gmail.com"
@@ -34,7 +35,7 @@
     "validate.js": "^0.12.0"
   },
   "deprecated": false,
-  "description": "bel sandbox which is used to run sidechain dapps",
+  "description": "sandbox which is used to run sidechain dapps",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -49,7 +50,7 @@
   },
   "license": "ISC",
   "main": "index.js",
-  "name": "bel-sandbox",
+  "name": "sandbox-dist",
   "scripts": {
     "build": "gulp",
     "test": "mocha"

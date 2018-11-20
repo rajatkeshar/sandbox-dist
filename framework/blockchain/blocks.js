@@ -12,6 +12,8 @@ var _setImmediate2 = require("babel-runtime/core-js/set-immediate"),
     _asyncToGenerator2 = require("babel-runtime/helpers/asyncToGenerator"),
     _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var dbLite = require('../helpers/dblite');
+
 function _interopRequireDefault(e) {
     return e && e.__esModule ? e : {
         default: e
@@ -77,23 +79,27 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                     }
                     return app.logger.error("verify block undefined"), e.abrupt("return");
                 case 4:
+                    // console.log("verify: verifyBlockId case4");
                     if (e.prev = 4, modules.logic.block.verifyId(t)) {
                         e.next = 7;
                         break
                     }
                     throw new Error("Invalid block id");
                 case 7:
+                    // console.log("verify: case7");
                     e.next = 12;
                     break;
                 case 9:
                     throw e.prev = 9, e.t0 = e.catch(4), new Error("Failed to verify block id: " + e.t0);
                 case 12:
+                    // console.log("verify: verifyBlockSignature case12");
                     if (e.prev = 12, modules.logic.block.verifySignature(t)) {
                         e.next = 15;
                         break
                     }
                     throw new Error("Invalid block signature");
                 case 15:
+                    // console.log("verify: case15");
                     e.next = 20;
                     break;
                 case 17:
@@ -105,22 +111,30 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                     }
                     throw new Error("Invalid delegates in block");
                 case 22:
-                    if (t.id === private_.genesisBlock.id) {
+                    // console.log("verify: case22 t.id private_.genesisBlock.id: ", t.id, private_.genesisBlock.id);
+                    if ((t.id === private_.genesisBlock.id)) {
+                        // console.log("111111111111111111111111111111111111111111");
                         e.next = 27;
                         break
                     }
+                    // console.log("commingBlock t: ", t);
+                    // console.log("private.lastBlock: ", private_.lastBlock);
+                    // console.log("t.prevBlockId, private_.lastBlock.id: ",t.prevBlockId, private_.lastBlock.id);
                     if (t.prevBlockId == private_.lastBlock.id) {
+                        // console.log("22222222222222222222222222222222222222222222");
                         e.next = 25;
                         break
-                    }
+                    } 
                     throw new Error("Invalid previous block");
                 case 25:
+                    // console.log("verify: case25");
                     if (!(t.timestamp <= private_.lastBlock.timestamp || t.timestamp > slots.getNow())) {
                         e.next = 27;
                         break
                     }
                     throw new Error("Invalid timestamp");
                 case 27:
+                    // console.log("verify: case27");
                     if (!(t.payloadLength > 1048576)) {
                         e.next = 29;
                         break
@@ -156,6 +170,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                     e.next = 59;
                     break;
                 case 56:
+                    // console.log("vefify: Failed to verify transaction: case56");
                     throw e.prev = 56, e.t5 = e.catch(41), new Error("Failed to verify transaction: " + e.t5);
                 case 59:
                     if (app.logger.trace("after verify transaction signature"), r = r.digest(), o == t.payloadLength) {
@@ -207,7 +222,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                         return e.id
                     }), r.abrupt("return", t(null, {
                         ids: n,
-                        firstHeight: a[4].height
+                        firstHeight: a[0].height
                     }));
                 case 8:
                     r.prev = 8, r.t0 = r.catch(0), t(r.t0);
@@ -268,85 +283,104 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
         }
     }
 }, Blocks.prototype.processBlock = function() {
-    var e = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function e(t, r) {
+    var r = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function e(t, r) {
         var o, a;
         return _regenerator2.default.wrap(function(e) {
+            // console.log("calling processBlock");
             for (;;) switch (e.prev = e.next) {
                 case 0:
                     if (app.logger.debug("processBlock block and options", t, r), r.local) {
-                        e.next = 33;
+                        e.next = 31;
                         break
                     }
-                    return e.prev = 2, modules.logic.block.normalize(t), e.next = 6, private_.verify(t);
-                case 6:
-                    if (!r.votes) {
-                        e.next = 16;
-                        break
-                    }
-                    if (o = r.votes, t.height == o.height) {
-                        e.next = 10;
-                        break
-                    }
-                    throw new Error("Votes height is not correct");
-                case 10:
-                    if (t.id == o.id) {
-                        e.next = 12;
-                        break
-                    }
-                    throw new Error("Votes id is not correct");
-                case 12:
-                    if (o.signatures && modules.logic.consensus.hasEnoughVotesRemote(o)) {
+                    if (e.prev = 2, modules.logic.block.normalize(t), !r.votes) { 
+                        // console.log("normlization true case0");
                         e.next = 14;
                         break
                     }
+                    if (o = r.votes, t.height == o.height) {
+                        e.next = 8;
+                        break
+                    }
+                    throw new Error("Votes height is not correct");
+                case 8:
+                    if (t.id == o.id) {
+                        e.next = 10;
+                        break
+                    }
+                    throw new Error("Votes id is not correct");
+                case 10:
+                    if (o.signatures && modules.logic.consensus.hasEnoughVotesRemote(o)) {
+                        e.next = 12;
+                        break
+                    }
                     throw new Error("Votes signature is not enough");
-                case 14:
+                case 12:
                     if (private_.verifyVotes(r.votes)) {
-                        e.next = 16;
+                        e.next = 14;
                         break
                     }
                     throw new Error("Failed to verify votes");
-                case 16:
+                case 14:
+                    // // console.log("processBlocks case14");
                     for (a in t.transactions) modules.logic.transaction.normalize(t.transactions[a]);
-                    e.next = 23;
+                    e.next = 21;
                     break;
-                case 19:
-                    throw e.prev = 19, e.t0 = e.catch(2), app.logger.error("Failed to verify block: " + e.t0), e.t0;
-                case 23:
-                    return app.logger.trace("before applyBlock"), e.prev = 24, e.next = 27, self.applyBlock(t, r);
+                case 17:
+                    throw e.prev = 17, e.t0 = e.catch(2), app.logger.error("Failed to verify remote block: " + e.t0), e.t0;
+                case 21:
+                    // console.log("processBlock case21");
+                    return app.logger.trace("before applyBlock"), e.prev = 22, e.next = 25, self.applyBlock(t, r);
+                case 25:
+                    // console.log("processBlock case25");
+                    e.next = 31;
+                    break;
                 case 27:
-                    e.next = 33;
+                // console.log("processBlock Failed to apply remote block case27");
+                    throw e.prev = 27, e.t1 = e.catch(22), app.logger.error("Failed to apply remote block: " + e.t1), e.t1;
+                case 31:
+                    // console.log("processBlock case31");
+                    return e.prev = 31, e.next = 34, private_.verify(t);
+                case 34:
+                    e.next = 40;
                     break;
-                case 29:
-                    throw e.prev = 29, e.t1 = e.catch(24), app.logger.error("Failed to apply block: " + e.t1), e.t1;
-                case 33:
-                    return e.prev = 33, self.processFee(t), self.saveBlock(t), e.next = 38, self.applyRound(t);
-                case 38:
-                    return e.next = 40, app.sdb.commitBlock({
+                case 36:
+                    // console.log("processBlock Failed to verify block case36");
+                    throw e.prev = 36, e.t2 = e.catch(31), app.logger.error("Failed to verify block: " + e.t2), e.t2;
+                case 40:
+                    // console.log("processBlock: saveBlock case40");
+                    return e.prev = 40, self.processFee(t), self.saveBlock(t), e.next = 45, self.applyRound(t);
+                case 45:
+                    // console.log("processBlock commitBlock case45");
+                    return e.next = 47, app.sdb.commitBlock({
                         noTransaction: !!r.noTransaction
                     });
-                case 40:
-                    e.next = 47;
-                    break;
-                case 42:
-                    throw e.prev = 42, e.t2 = e.catch(33), app.logger.error("save block error: ", e.t2), app.sdb.rollbackBlock(), new Error("Failed to save block: " + e.t2);
                 case 47:
+                    // console.log("processBlock case47");
+                    e.next = 54;
+                    break;
+                case 49:
+                    // console.log("processBlock: save block error: case49");
+                    throw e.prev = 49, e.t3 = e.catch(40), app.logger.error("save block error: ", e.t3), app.sdb.rollbackBlock(), new Error("Failed to save block: " + e.t3);
+                case 54:
+                    // console.log("processBlock Block applied correctly case54");
                     app.logger.info("Block applied correctly with " + t.count + " transactions"), self.setLastBlock(t), private_.blockCache = {}, private_.proposeCache = {}, private_.lastVoteTime = null, modules.logic.consensus.clearState(), r.broadcast && modules.api.transport.message("block", {
                         block: t,
                         votes: r.votes
                     });
-                case 54:
+                case 61:
                 case "end":
                     return e.stop()
             }
         }, e, this, [
-            [2, 19],
-            [24, 29],
-            [33, 42]
+            [2, 17],
+            [22, 27],
+            [31, 36],
+            [40, 49]
         ])
     }));
-    return function(t, r) {
-        return e.apply(this, arguments)
+    return function(e, t) {
+        return r.apply(this, arguments)
     }
 }(), Blocks.prototype.applyRound = function() {
     var e = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function e(t) {
@@ -409,6 +443,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
         }, t)
     })
 }, Blocks.prototype.saveBlock = function(e) {
+    // console.log("saveBlock: e: ", e);
     for (var t in app.logger.trace("Blocks#save height", e.height), e.transactions) {
         var r = e.transactions[t];
         r.height = e.height, app.sdb.create("Transaction", r)
@@ -431,7 +466,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
         }), t[e]
     })
 }, Blocks.prototype.deleteBlocksBefore = function(e, t) {
-    async.whilst(function() {
+    async.whilst(function() {     
         return !(e.height >= private_.lastBlock.height)
     }, function(e) {
         app.logger.trace("Blocks#popLastBlock", private_.lastBlock.height), private_.popLastBlock(private_.lastBlock, function(t, r) {
@@ -448,7 +483,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                 $gte: e
             }
         }
-    }, t)
+    }, t);
 }, Blocks.prototype.genesisBlock = function() {
     return private_.genesisBlock
 }, Blocks.prototype.createBlock = function() {
@@ -552,15 +587,24 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
         return e.apply(this, arguments)
     }
 }(), Blocks.prototype.loadBlocksPeer = function(e, t, r) {
+    //t.ip="922660426";
+    // console.log("loadBlocksPeer lastBlockHeight  e: ", e);
+    // console.log("loadBlocksPeer: t", t);
+    // console.log("loadBlocksPeer: r", r);
     app.logger.info("Load blocks after:", e), modules.api.transport.getPeer(t, "get", "/blocks/after", {
         lastBlockHeight: e
     }, function(e, t) {
+        // console.log("afterBlock response e: ", e);
+        // console.log("afterBlock response t: ", t);
+        // console.log("getFirstBlock: ", t.body.blocks[0]);
         if (e || !t.body || !t.body.success) return r("Failed to load blocks from peer: " + (e || t.body.error));
         r(null, t.body.blocks)
     })
 }, Blocks.prototype.loadBlocksOffset = function(e, t, r) {
     app.logger.trace("loadBlocksOffset !!!!!!!!!!")
 }, Blocks.prototype.findCommon = function(e, t) {
+    // console.log("findCommon e: ", e);
+    // console.log("findCommon t: ", t);
     var r = this;
     (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function o() {
         var a, n;
@@ -600,18 +644,25 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
     }))()
 }, Blocks.prototype.getCommonBlock = function() {
     var e = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function e(t, r, o) {
+        //r.ip="54.254.174.74";
+        // console.log("getCommonBlock t: ", t);
+        // console.log("getCommonBlock r: ", r);
+        // console.log("getCommonBlock o: ", o);
         var a, n, s, i, c, l, p;
         return _regenerator2.default.wrap(function(e) {
             for (;;) switch (e.prev = e.next) {
                 case 0:
                     return a = t, e.next = 3, PIFY(private_.getIdSequence)(a);
                 case 3:
+                    // console.log("getCommonBlock e.sent: ", e.sent);
+                    // console.log("a: ", a);
                     return n = e.sent, app.logger.debug("Blocks#getIdSequence", n), s = a, a = n.firstHeight, i = {
                         ids: n.ids,
                         max: s,
                         min: a
                     }, e.next = 10, PIFY(modules.api.transport.getPeer)(r, "get", "/blocks/common", i);
                 case 10:
+                // console.log("commonBlock e.sent: ", e.sent);
                     if ((c = e.sent).body) {
                         e.next = 13;
                         break
@@ -624,6 +675,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                     }
                     throw new Error("Get common block error: " + c.body.error);
                 case 15:
+                    // console.log("commonBlock c: ", c);
                     return l = {
                         id: c.body.id,
                         height: c.body.height
@@ -693,6 +745,8 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
         ])
     }))()
 }, Blocks.prototype.getBlocksAfter = function(e, t) {
+    // console.log("getBlocksAfter e: ", e);
+    // console.log("getBlocksAfter t: ", t);
     var r = this;
     (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function o() {
         var a, n, s, i, c, l, p, u, d, g;
@@ -711,6 +765,8 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
                         }
                     });
                 case 4:
+                    // console.log("getBlocksAfter case4 r.sent : ", r);
+                    // console.log("getBlocksAfter case4 : s.length : ", s);
                     if ((s = r.sent) && s.length) {
                         r.next = 7;
                         break

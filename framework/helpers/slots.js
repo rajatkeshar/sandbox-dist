@@ -10,8 +10,8 @@ function getEpochTime(e) {
     return Math.floor((e - t) / 1e3)
 }
 module.exports = {
-    interval: 15,
-    delegates: 5,
+    interval: 10,
+    delegates: 1,
     getTime: function(e) {
         return getEpochTime(e)
     },
