@@ -23,7 +23,7 @@ Transport.prototype.message = function(r, e, t) {
         ip: "0.0.0.0",
         port: 9305
     };
-    app.config.peers && Array.isArray(app.config.peers) && app.config.peers && (peer = app.config.peers[0]);
+    app.config.peers && Array.isArray(app.config.peers) && app.config.peers.length && (peer = app.config.peers[0]);
     var o = {
         call: "transport#request",
         args: {
