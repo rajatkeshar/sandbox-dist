@@ -55,7 +55,7 @@ private_.lastBlock = null, private_.genesisBlock = null, private_.loaded = !1, p
             r && (app.logger.error(r), process.exit(0)), modules.blockchain.accounts.undoMerging({
                 publicKey: e.delegate,
                 balance: {
-                    SRN: a
+                    DEFAULT: a
                 }
             }, function(r) {
                 private_.deleteBlock(e.id, function(e) {
